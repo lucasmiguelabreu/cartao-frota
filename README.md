@@ -100,13 +100,3 @@ A API de estabelecimentos deve:
   "lng": -46.6
 }
 ```
-
----
-
-## 💡 Dicas para Devs Juniors
-
-- Os hooks `useState`, `useEffect` e `useMediaQuery` são usados para lidar com estado, efeitos colaterais e responsividade.
-- O `useEffect` com `navigator.geolocation` roda apenas uma vez para pegar a localização inicial.
-- O filtro da busca usa `Array.prototype.filter()` comparando o nome do estabelecimento com o texto digitado.
-- O componente `Map.tsx` recebe `markers` e `userLocation` como props.
-- O mapa é carregado com `<LoadScript>` e os pins com `<Marker>`
