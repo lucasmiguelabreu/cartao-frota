@@ -109,15 +109,4 @@ A API de estabelecimentos deve:
 - O `useEffect` com `navigator.geolocation` roda apenas uma vez para pegar a localização inicial.
 - O filtro da busca usa `Array.prototype.filter()` comparando o nome do estabelecimento com o texto digitado.
 - O componente `Map.tsx` recebe `markers` e `userLocation` como props.
-- O mapa é carregado com `<LoadScript>` e os pins com `<Marker>`.
-
-Se quiser estender o projeto, você pode:
-- Adicionar categorias de estabelecimentos
-- Incluir popups com detalhes ao clicar em um marcador
-- Melhorar o design com animações
-- Armazenar os dados com backend próprio
-
----
-
-## 🧑‍💻 Autor
-Este projeto foi construído como parte de um sistema de localização para empresas que utilizam o Cartão Frota. Ideal para aprendizes de React e Next.js que desejam entender como integrar APIs externas com uma aplicação visual e responsiva.
+- O mapa é carregado com `<LoadScript>` e os pins com `<Marker>`
