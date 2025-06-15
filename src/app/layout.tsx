@@ -14,7 +14,8 @@ export default function RootLayout({ children }: { children: ReactNode; }) {
       <head>
         <link rel="icon" href="/icon.png" sizes="64x64" />
       </head>
-      <body className="bg-black text-white">
+      <body className="bg-white text-slate-800 overflow-hidden">
+        {/* Aqui o Navbar e Sidebar já vêm do MainLayout */}
         <MainLayout>{children}</MainLayout>
       </body>
     </html>

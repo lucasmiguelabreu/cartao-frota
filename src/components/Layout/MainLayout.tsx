@@ -19,27 +19,31 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   return (
     <EstabelecimentosProvider>
-      <Navbar
-        isMobile={isMobile}
-        menuOpen={menuOpen}
-        onMenuToggle={() => setMenuOpen((o) => !o)}
-      />
+      <div className="flex flex-col h-screen overflow-hidden">
+        {/* 1. Navbar: apenas aqui */}
+        <Navbar
+          isMobile={isMobile}
+          menuOpen={menuOpen}
+          onMenuToggle={() => setMenuOpen((o) => !o)}
+        />
 
-      <main className="w-full h-full relative">
-        {children}
-      </main>
+        {/* 2. Conteúdo abaixo do navbar */}
+        <div className="flex-1 relative overflow-hidden">
+          {children}
 
-      {/* Exibe o banner de ads usando as duas imagens em public/banners */}
-      <AdBanner
-        images={[
-          "/banners/dia-dos-namorados.jpg",
-          "/banners/Porque-usar-megavale.jpg",
-        ]}
-        //dailyLimit={3}
-        position="bottom-right"
-      />
+          {/* AdBanner sobre o mapa */}
+          <AdBanner
+            images={[
+              "/banners/dia-dos-namorados.jpg",
+              "/banners/Porque-usar-megavale.jpg"
+            ]}
+            position="bottom-right"
+          />
 
-      <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
+          {/* Sidebar controlada aqui */}
+          <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
+        </div>
+      </div>
     </EstabelecimentosProvider>
   );
 }

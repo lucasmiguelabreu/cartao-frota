@@ -4,5 +4,12 @@ html, body, #__next {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: #fff;
   overflow: hidden; /* impede qualquer scroll vertical */
+}
+
+/* Oculta o painel de Issues do Next.js em Dev */
+#__next > .next-dev-issues,
+#__next > .next-dev-overlay {
+  display: none !important;
 }

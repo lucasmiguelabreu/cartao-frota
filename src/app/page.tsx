@@ -1,16 +1,15 @@
-// src/app/page.tsx
 "use client";
 
-import Legend from "@/components/Legend/Legend";
-import LocationIndicator from "@/components/LocationIndicator/LocationIndicator";
 import MapContainer from "@/components/MapContainer/MapContainer";
+import LocationIndicator from "@/components/LocationIndicator/LocationIndicator";
+import Legend from "@/components/Legend/Legend";
 
 export default function Home() {
   return (
-    <main className="flex-1 w-full relative overflow-hidden">
+    <div className="w-full h-full relative">
       <MapContainer />
       <LocationIndicator />
-      <Legend />
-    </main>
+      {/*<Legend /> // Componente de legenda*/}
+    </div>
   );
 }
