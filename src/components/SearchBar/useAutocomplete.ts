@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, KeyboardEvent } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function useAutocomplete<T extends { nome: string; }>(
   items: T[],
@@ -8,22 +8,15 @@ export function useAutocomplete<T extends { nome: string; }>(
 ) {
   const [search, setSearch] = useState("");
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
-  const suggestionBoxRef = useRef<HTMLDivElement>(null);
+  const suggestionBoxRef = useRef<HTMLUListElement>(null);
 
   const suggestions = search
-    ? items.filter((item) =>
-      item.nome.toLowerCase().includes(search.toLowerCase())
+    ? items.filter((i) =>
+      i.nome.toLowerCase().includes(search.toLowerCase())
     )
     : [];
-
-  const handleBuscar = () => {
-    if (suggestions.length > 0) {
-      onSelect(suggestions[0]);
-      setSearch("");
-      setSuggestionsOpen(false);
-    }
-  };
 
   const handleSelect = (item: T) => {
     onSelect(item);
@@ -31,7 +24,11 @@ export function useAutocomplete<T extends { nome: string; }>(
     setSuggestionsOpen(false);
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleBuscar = () => {
+    if (suggestions.length > 0) handleSelect(suggestions[0]);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Escape") {
       setSuggestionsOpen(false);
       setSearch("");
@@ -41,19 +38,17 @@ export function useAutocomplete<T extends { nome: string; }>(
     }
   };
 
-  // Abre/fecha ao digitar/limpar
   useEffect(() => {
-    setSuggestionsOpen(!!search);
+    setSuggestionsOpen(Boolean(search));
   }, [search]);
 
-  // Fecha ao clicar fora
   useEffect(() => {
-    function onClickOutside(event: MouseEvent) {
+    function onClickOutside(e: MouseEvent) {
       if (
         suggestionBoxRef.current &&
-        !suggestionBoxRef.current.contains(event.target as Node) &&
+        !suggestionBoxRef.current.contains(e.target as Node) &&
         inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
+        !inputRef.current.contains(e.target as Node)
       ) {
         setSuggestionsOpen(false);
       }

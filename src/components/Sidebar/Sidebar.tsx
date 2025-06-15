@@ -1,6 +1,8 @@
 "use client";
+
 import { FC } from "react";
-import { X, Mail } from "lucide-react";
+import Image from "next/image";
+import { FiX, FiInstagram, FiFacebook, FiHeadphones } from "react-icons/fi";
 
 interface SidebarProps {
   open: boolean;
@@ -14,72 +16,87 @@ const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30"
+        className="fixed inset-0 bg-black/25 z-40"
         onClick={onClose}
       />
 
-      {/* Painel */}
-      <aside className="fixed top-0 right-0 h-full w-72 sm:w-80 bg-white/95 backdrop-blur-lg border-l border-slate-200/50 shadow-2xl flex flex-col z-40">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200/50">
-          <h2 className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
-            Menu
-          </h2>
+      {/* Sidebar */}
+      <aside className="fixed top-0 right-0 h-full w-72 sm:w-80 bg-white shadow-2xl flex flex-col z-50 overflow-y-auto">
+        {/* Header com logo e título */}
+        <div className="flex items-center justify-between px-6 py-4 border-none">
+          <div className="flex items-center space-x-3">
+            <div className="relative w-10 h-10 sm:w-12 sm:h-12">
+              <Image
+                src="/icon.png"
+                alt="Logo Megavale"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <h2 className="text-xl font-bold text-slate-800">Megavale</h2>
+          </div>
           <button
+            aria-label="Fechar sidebar"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-red-500 rounded-xl hover:bg-red-50"
-            aria-label="Fechar menu"
+            className="p-2 rounded hover:bg-gray-100 transition"
           >
-            <X size={24} />
+            <FiX size={20} />
           </button>
         </div>
 
-        {/* Conteúdo */}
-        <div className="flex-1 p-6 space-y-6">
-          {/* Contato */}
-          <div className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-2xl p-6 border border-emerald-100">
-            <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-              <Mail className="text-emerald-600" size={20} />
-              Contato FAC
+        {/* Conteúdo principal */}
+        <div className="flex-1 px-6 py-4 space-y-6">
+          {/* Atendimento e Suporte */}
+          <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-slate-800 mb-2">
+              <FiHeadphones className="text-blue-600" size={20} />
+              Atendimento e Suporte
             </h3>
-            <p className="text-sm text-slate-600 mb-4">
-              Entre em contato conosco para suporte e informações.
+            <p className="text-sm text-slate-700 mb-3">
+              Em caso de dúvidas, fale com nosso time de suporte.
             </p>
             <a
-              href="mailto:fac@megavalecard.com.br"
-              className="flex items-center gap-3 bg-white text-slate-700 border border-emerald-200 px-4 py-3 rounded-xl hover:bg-emerald-50 hover:border-emerald-300 transition duration-200 shadow-sm"
+              href="mailto:support@megavalecard.com.br"
+              className="inline-block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition"
             >
-              <div className="p-2 bg-emerald-100 rounded-lg">
-                <Mail size={16} className="text-emerald-600" />
-              </div>
-              <div>
-                <div className="font-medium text-sm">Email</div>
-                <div className="text-xs text-slate-500">fac@megavalecard.com.br</div>
-              </div>
+              Enviar email
             </a>
           </div>
 
-          {/* Sobre o Sistema */}
-          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-            <h3 className="text-lg font-semibold text-slate-800 mb-3">
-              Sobre o Sistema
-            </h3>
-            <div className="space-y-3 text-sm text-slate-600">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                <span>Localização em tempo real</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span>Busca inteligente</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span>Interface moderna</span>
-              </div>
-            </div>
+          {/* Importante */}
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-slate-800 mb-2">Importante</h3>
+            <p className="text-sm text-slate-700">
+              Este sistema está em fase de testes. As informações podem sofrer alterações.
+            </p>
           </div>
         </div>
+
+        {/* Rodapé com redes sociais */}
+        <footer className="px-6 py-4 border-none flex justify-around">
+          <a
+            href="https://instagram.com/megavalecard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-full hover:bg-gray-100 transition"
+          >
+            <FiInstagram size={24} className="text-pink-500" />
+          </a>
+          <a
+            href="https://facebook.com/megavalecard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-full hover:bg-gray-100 transition"
+          >
+            <FiFacebook size={24} className="text-blue-600" />
+          </a>
+          <a
+            href="mailto:support@megavalecard.com.br"
+            className="p-2 rounded-full hover:bg-gray-100 transition"
+          >
+            <FiHeadphones size={24} className="text-blue-600" />
+          </a>
+        </footer>
       </aside>
     </>
   );
