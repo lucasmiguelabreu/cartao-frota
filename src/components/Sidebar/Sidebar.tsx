@@ -50,7 +50,7 @@ const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
           <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
             <h3 className="flex items-center gap-2 text-lg font-semibold text-slate-800 mb-2">
               <FiHeadphones className="text-blue-600" size={20} />
-              Atendimento e Suporte
+              Suporte
             </h3>
             <p className="text-sm text-slate-700 mb-3">
               Em caso de dúvidas, fale com nosso time de suporte.
@@ -59,7 +59,7 @@ const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
               href="mailto:support@megavalecard.com.br"
               className="inline-block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition"
             >
-              Enviar email
+              Atendimento
             </a>
           </div>
 

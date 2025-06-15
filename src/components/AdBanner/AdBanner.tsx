@@ -23,6 +23,15 @@ export const AdBanner: FC<AdBannerProps> = ({
     if (images.length) setVisible(true);
   }, [images]);
 
+  // Troca a imagem a cada 5 segundos
+  useEffect(() => {
+    if (!visible || images.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((idx) => (idx + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [visible, images.length]);
+
   if (!visible) return null;
 
   const handleClose = () => setVisible(false);
