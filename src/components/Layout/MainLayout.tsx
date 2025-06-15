@@ -31,7 +31,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         <div className="flex-1 relative overflow-hidden">
           {children}
 
-          {/* AdBanner sobre o mapa */}
+          {/* Imagens das propagandas */}
           <AdBanner
             images={[
               "/banners/dia-dos-namorados.jpg",

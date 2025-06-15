@@ -1,4 +1,3 @@
-// src/components/AdBanner/AdBanner.tsx
 "use client";
 
 import { useState, useEffect, FC } from "react";
@@ -17,21 +16,8 @@ export const AdBanner: FC<AdBannerProps> = ({
   const [visible, setVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Mostrar ao montar
   useEffect(() => {
-    if (images.length) {
-      setVisible(true);
-    }
-  }, [images]);
-
-  // Avançar slide automaticamente a cada 5 segundos
-  useEffect(() => {
-    if (images.length > 1) {
-      const interval = setInterval(() => {
-        setCurrentIndex((i) => (i + 1) % images.length);
-      }, 4000); // Tempo do slide 4s
-      return () => clearInterval(interval);
-    }
+    if (images.length) setVisible(true);
   }, [images]);
 
   if (!visible) return null;
@@ -43,7 +29,11 @@ export const AdBanner: FC<AdBannerProps> = ({
     <div
       className={`
         fixed ${posClass} bottom-4
-        w-11/12 sm:w-64 md:w-80
+        w-64               /* mobile: 16rem */
+        sm:w-72            /* ≥640px: 18rem */
+        md:w-80            /* ≥768px: 20rem */
+        lg:w-96            /* ≥1024px:24rem */
+        xl:w-[30rem]       /* ≥1280px:30rem */
         overflow-hidden
         z-50
       `}
@@ -51,36 +41,21 @@ export const AdBanner: FC<AdBannerProps> = ({
       {/* Fechar */}
       <button
         onClick={handleClose}
-        className="absolute top-1 right-1 p-1 bg-white/60 rounded-full hover:bg-white transition z-10"
+        className="absolute top-1 right-1 p-1 bg-white/70 rounded-full hover:bg-white transition z-10"
         aria-label="Fechar anúncio"
       >
         <X size={20} className="text-gray-800" />
       </button>
 
-      {/* Imagem */}
-      <div className="relative w-full h-56">
+      {/* Conteúdo do banner */}
+      <div className="relative w-full h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80">
         <Image
           src={images[currentIndex]}
           alt={`Anúncio ${currentIndex + 1}`}
           fill
-          className="object-contain bg-transparent"
+          className="object-contain"
         />
       </div>
-
-      {/* Indicadores de slide */}
-      {images.length > 1 && (
-        <div className="flex justify-center space-x-1 py-2">
-          {images.map((_, idx) => (
-            <span
-              key={idx}
-              className={`
-                h-2 w-2 rounded-full
-                ${idx === currentIndex ? "bg-gray-800" : "bg-gray-400"}
-              `}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 };

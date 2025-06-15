@@ -12,33 +12,46 @@ import { useMediaQuery } from "usehooks-ts";
 import { useEstabelecimentos } from "@/context/EstabelecimentosContext";
 
 export default function MapContainer() {
-  const { markers, selectedMarker, setSelectedMarker, loading } = useEstabelecimentos();
-  const [openInfoWindowIdx, setOpenInfoWindowIdx] = useState<number | null>(null);
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number; } | null>(null);
+  const { markers, selectedMarker, setSelectedMarker, loading } =
+    useEstabelecimentos();
 
-  const isMobile = useMediaQuery("(max-width:1024px)");
-  const navbarHeight = isMobile ? 72 : 80;
+  // Índice da InfoWindow aberta
+  const [openInfoWindowIdx, setOpenInfoWindowIdx] = useState<number | null>(
+    null
+  );
+  // Geolocalização do usuário
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number; } | null>(
+    null
+  );
+
+  // Calcular altura do mapa descontando Navbar
+  const isMobileViewport = useMediaQuery("(max-width:1024px)");
+  const navbarHeight = isMobileViewport ? 72 : 80;
   const containerStyle = {
     width: "100%",
     height: `calc(100vh - ${navbarHeight}px)`,
   };
 
+  // Pega localização
   useEffect(() => {
-    if (typeof navigator !== "undefined" && navigator.geolocation) {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        ({ coords }) =>
+          setUserLocation({ lat: coords.latitude, lng: coords.longitude }),
         () => { },
         { enableHighAccuracy: true }
       );
     }
   }, []);
 
+  // Carrega script Google Maps
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
 
+  // Ícone dos postos
   const postoIcon = useMemo(() => {
-    if (typeof window === "undefined" || !isLoaded || !window.google?.maps) return undefined;
+    if (!isLoaded || !window.google?.maps) return undefined;
     return {
       url: "/icons/posto.png",
       scaledSize: new window.google.maps.Size(40, 40),
@@ -46,8 +59,9 @@ export default function MapContainer() {
     };
   }, [isLoaded]);
 
+  // Ícone da localização do usuário
   const userIcon = useMemo(() => {
-    if (typeof window === "undefined" || !isLoaded || !window.google?.maps) return undefined;
+    if (!isLoaded || !window.google?.maps) return undefined;
     return {
       url: "/icons/my-location.png",
       scaledSize: new window.google.maps.Size(36, 36),
@@ -55,6 +69,7 @@ export default function MapContainer() {
     };
   }, [isLoaded]);
 
+  // Sincroniza seleção com InfoWindow
   useEffect(() => {
     if (!selectedMarker) {
       setOpenInfoWindowIdx(null);
@@ -69,6 +84,7 @@ export default function MapContainer() {
     setOpenInfoWindowIdx(idx >= 0 ? idx : null);
   }, [selectedMarker, markers]);
 
+  // Estados de erro/carregamento
   if (loadError) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-white">
@@ -91,14 +107,15 @@ export default function MapContainer() {
     );
   }
 
+  // Opções do mapa: removendo todos os controles
   const mapOptions: google.maps.MapOptions = {
-    disableDefaultUI: false,
-    zoomControl: true,
+    disableDefaultUI: true,       // desabilita zoom, street view, etc.
+    zoomControl: false,           // garante que o zoom também está desligado
     fullscreenControl: false,
     mapTypeControl: false,
     streetViewControl: false,
     rotateControl: false,
-    scaleControl: true,
+    scaleControl: false,
     clickableIcons: false,
     gestureHandling: "greedy",
     styles: [
@@ -122,6 +139,7 @@ export default function MapContainer() {
       zoom={14}
       options={mapOptions}
     >
+      {/* Marcador do usuário */}
       {userLocation && (
         <Marker
           position={userLocation}
@@ -131,34 +149,41 @@ export default function MapContainer() {
         />
       )}
 
+      {/* Marcadores de postos */}
       {markers.map((m, i) => (
         <Marker
           key={i}
           position={{ lat: m.lat, lng: m.lng }}
           icon={m.tipo === "posto" ? postoIcon : undefined}
-          onClick={() => {
-            setSelectedMarker(m);
-            setOpenInfoWindowIdx(i);
-          }}
-          zIndex={i === openInfoWindowIdx ? 1000 : 1}
+          onClick={() => setSelectedMarker(m)}
           title={m.nome}
         >
-          {i === openInfoWindowIdx && (
+          {openInfoWindowIdx === i && (
             <InfoWindow
-              onCloseClick={() => {
-                setSelectedMarker(null);
-                setOpenInfoWindowIdx(null);
+              onCloseClick={() => setSelectedMarker(null)}
+              options={{
+                pixelOffset: new window.google.maps.Size(0, -10),
+                maxWidth: 420,
               }}
-              options={{ pixelOffset: new window.google.maps.Size(0, -10) }}
             >
-              {/* Conteúdo do InfoWindow */}
-              <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 text-white">
-                  <h3 className="font-bold text-lg">{m.nome}</h3>
+              <div className="bg-white rounded-lg shadow-lg w-80 overflow-visible">
+                <div className="px-4 py-2">
+                  <h3 className="text-slate-800 text-base font-semibold">
+                    {m.nome}
+                  </h3>
                 </div>
-                <div className="p-4">
-                  <p className="text-sm text-slate-700 mb-2">{m.endereco}</p>
-                  {/* Ações e detalhes adicionais */}
+                <div className="px-4 pb-3 text-sm text-slate-700">
+                  <p className="whitespace-normal break-words leading-relaxed mb-3">
+                    {m.endereco}
+                  </p>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${m.lat},${m.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full bg-blue-500 hover:bg-blue-600 text-white text-center text-sm font-medium py-2 rounded"
+                  >
+                    Ir até o local
+                  </a>
                 </div>
               </div>
             </InfoWindow>
