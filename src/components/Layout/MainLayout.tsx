@@ -35,11 +35,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
           <AdBanner
             images={[
               "/banners/dia-dos-namorados.jpg",
-              "/banners/Porque-usar-megavale.jpg"
+              "/banners/Porque-usar-megavale.jpg",
+            ]}
+            links={[
+              "https://www.instagram.com/megavalecard/?hl=en",
+              "https://www.megavalecard.com.br/",
             ]}
             position="bottom-right"
           />
-
           {/* Sidebar controlada aqui */}
           <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
         </div>
